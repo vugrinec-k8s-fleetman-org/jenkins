@@ -1,15 +1,8 @@
-from jenkins/jenkins:2.332.3-lts-alpine
+from jenkins/jenkins:2.361.4-lts-alpine
 USER root
 # Pipeline
-RUN /usr/local/bin/install-plugins.sh workflow-aggregator && \
-    /usr/local/bin/install-plugins.sh github && \
-    /usr/local/bin/install-plugins.sh ws-cleanup && \
-    /usr/local/bin/install-plugins.sh greenballs && \
-    /usr/local/bin/install-plugins.sh simple-theme-plugin && \
-    /usr/local/bin/install-plugins.sh kubernetes && \
-    /usr/local/bin/install-plugins.sh docker-workflow && \
-    /usr/local/bin/install-plugins.sh kubernetes-cli && \
-    /usr/local/bin/install-plugins.sh github-branch-source
+COPY --chown=jenkins:jenkins plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt
 
 # install Maven, Java, Docker, AWS
 RUN apk add --no-cache maven \
